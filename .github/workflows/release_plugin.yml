@@ -55,7 +55,16 @@ jobs:
           git push origin HEAD
           gh pr create \
             --title "Release $PACKAGE_VERSION_AFTER" \
-            --body "[Merge this PR - Do NOT squash nor rebase, in order to keep commit hashes and tags] Automated release PR from release branch - GitHub run ${{ github.run_number }}" \
+            --body "$(cat <<'EOF'
+            # **Do NOT squash nor rebase**, use regular merge commit, in order to keep commit hashes and tags
+            ## Automated Release PR
+
+            **Plugin Version:** $PACKAGE_VERSION_AFTER  
+            **GitHub Run ID:** $GITHUB_RUN_NUMBER  
+
+            _This PR was automatically created by the release workflow._
+            EOF
+            )" \
             --base main \
             --head release-pr-${GITHUB_RUN_NUMBER} \
             --repo $GITHUB_REPOSITORY
